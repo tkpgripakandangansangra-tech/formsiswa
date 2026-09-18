@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#020617">
+  <title>Form Pendaftaran Siswa TK</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; }
+    
+    .bg-gradient-custom {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      background-size: 200% 200%;
+      animation: gradientMove 15s ease infinite;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .btn-3d {
+      transition: all 0.15s ease;
+      position: relative;
+      top: 0;
+    }
+    .btn-3d:active:not(:disabled) {
+      top: 3px;
+      box-shadow: 0 0 0 rgb(30, 58, 138) !important;
+    }
+    
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    input, select, textarea {
+      background-color: rgba(15, 23, 42, 0.6) !important;
+      border-color: rgba(71, 85, 105, 0.5) !important;
+      color: #e2e8f0 !important;
+    }
+    input:focus, select:focus, textarea:focus {
+      background-color: rgba(30, 41, 59, 0.95) !important;
+      border-color: #3b82f6 !important;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    }
+
+    input[type="text"], textarea {
+      text-transform: uppercase;
+    }
+
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    .mobile-toast {
+      width: calc(100% - 2rem);
+      max-width: 400px;
+      left: 50%;
+      transform: translateX(-50%) translateY(5rem);
+    }
+    .mobile-toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body class="bg-[#020617] min-h-screen text-slate-200 flex justify-center">
+
+  <div class="w-full max-w-md bg-gradient-custom min-h-screen relative shadow-[0_0_40px_rgba(0,0,0,0.5)] border-x border-slate-800/60 overflow-x-hidden flex flex-col pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+
+    <!-- HEADER INSTANSI -->
+    <header class="glass-panel sticky top-0 z-40 border-b border-slate-700/80 shadow-lg shrink-0">
+      <div class="px-4 h-16 flex items-center justify-between gap-2">
+        <div class="flex items-center space-x-3 min-w-0 flex-1">
+          <div class="w-10 h-10 shrink-0 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center font-extrabold text-white text-base shadow-lg border-2 border-white/20">
+            TK
+          </div>
+          <div class="min-w-0">
+            <h1 class="font-extrabold text-sm text-blue-100 leading-tight tracking-wide truncate">TK PGRI PAKANDANGAN</h1>
+            <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest truncate">PAKANDANGAN SANGRA BLUTO SUMENEP</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="px-4 py-6 flex-1">
+      <div id="tab-pendaftaran" class="space-y-6 animate-fade-in pb-16">
+        
+        <!-- JUDUL & TAHUN AJARAN -->
+        <div class="text-center mb-5">
+          <h2 class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300 mb-2 drop-shadow-lg leading-tight">FORM PENDAFTARAN SISWA BARU</h2>
+          <p class="text-slate-400 text-sm font-medium">Tahun Ajaran : <span class="text-base text-blue-300 font-bold bg-blue-900/30 px-3 py-1 rounded-full border border-blue-800/50">2026/2027</span></p>
+        </div>
+
+        <!-- KOTAK PENCARIAN DATA SISWA -->
+        <div class="w-full glass-panel p-2.5 rounded-2xl border border-slate-700/80 shadow-xl mb-6 bg-slate-900/50">
+          <div class="flex items-center gap-2">
+            <div class="relative flex-1">
+              <input 
+                type="text" 
+                inputmode="numeric" 
+                pattern="[0-9]*" 
+                maxlength="16" 
+                id="cari-nik" 
+                placeholder="CARI DATA SISWA (16 DIGIT NIK)..." 
+                class="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-slate-700/80 bg-slate-950/70 text-white placeholder-slate-400 tracking-wider font-semibold focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all uppercase"
+                onkeydown="if(event.key === 'Enter'){ event.preventDefault(); aksiCariAtauEdit(); }"
+              >
+            </div>
+            <button 
+              type="button" 
+              id="btn-cari" 
+              onclick="aksiCariAtauEdit()" 
+              class="btn-3d px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-[0_4px_0_rgb(30,58,138)] border border-blue-400/40 active:top-1 transition-all shrink-0 cursor-pointer"
+              title="Cari Data Siswa"
+            >
+              <!-- Ikon Kaca Pembesar -->
+              <svg id="icon-kaca-pembesar" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              <!-- Ikon Pensil (Mode Edit) -->
+              <svg id="icon-pensil" class="w-5 h-5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+              <span id="label-btn-cari" class="text-xs font-extrabold tracking-wider uppercase hidden xs:inline-block">Cari</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PANEL STATUS VERIFIKASI (MURNI INFORMASI STATUS, TANPA TOMBOL GANDA) -->
+        <div id="status-verifikasi-container" class="hidden w-full transition-all duration-300 mb-6">
+          <div class="glass-panel px-4 py-3 rounded-xl border border-slate-700/80 shadow-md flex items-center justify-center bg-slate-900/60">
+            <p id="status-verifikasi-text" class="text-xs sm:text-sm font-bold text-center tracking-wide"></p>
+          </div>
+        </div>
+
+        <!-- KOTAK PESAN SUKSES PENDAFTARAN -->
+        <div id="kotak-sukses" class="hidden w-full glass-panel border border-green-500/50 p-6 rounded-2xl text-center shadow-[0_0_30px_rgba(34,197,94,0.2)]">
+          <div class="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-green-500 animate-bounce">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold text-green-400 mb-2">Berhasil Disimpan!</h3>
+          <p id="pesan-sukses-detail" class="text-sm text-slate-300 mb-6">Data siswa aman tersimpan di basis data sekolah.</p>
+          <button type="button" onclick="resetHalamanPenuh()" class="btn-3d bg-slate-700 shadow-[0_4px_0_rgb(51,65,85)] hover:bg-slate-600 text-white px-6 py-3 rounded-xl font-bold w-full border border-slate-500 text-sm">
+            KEMBALI / PENDAFTARAN BARU
+          </button>
+        </div>
+
+        <!-- FORMULIR INPUT LENGKAP -->
+        <form id="form-pendaftaran" onsubmit="kirimPendaftaran(event)" oninput="periksaForm()" onchange="periksaForm()" class="w-full space-y-6">
+          <input type="hidden" id="baris-edit" value="">
+          <input type="hidden" id="status-lama" value="">
+          <input type="hidden" id="old-link-kk" value="">
+          <input type="hidden" id="old-link-akta" value="">
+          <input type="hidden" id="old-link-foto" value="">
+
+          <!-- A. Identitas Siswa -->
+          <div class="glass-panel rounded-2xl overflow-hidden shadow-xl border border-slate-700/50">
+            <div class="bg-slate-800/80 px-5 py-3 border-b border-slate-700 flex items-center">
+              <span class="bg-blue-500/20 text-blue-400 w-7 h-7 flex items-center justify-center rounded-lg mr-3 border border-blue-500/30 text-sm font-bold">1</span>
+              <h3 class="text-sm font-bold text-blue-200 uppercase tracking-wider">Identitas Calon Siswa</h3>
+            </div>
+            <div class="p-5 flex flex-col gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Nama Lengkap <span class="text-red-400">*</span></label>
+                <input type="text" id="nama" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700" placeholder="Sesuai Akta Lahir">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Jenis Kelamin <span class="text-red-400">*</span></label>
+                <select id="jk" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700">
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">NIK Siswa (16 Digit) <span class="text-red-400">*</span></label>
+                <input type="text" inputmode="numeric" pattern="[0-9]{16}" minlength="16" maxlength="16" id="nik" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700" placeholder="16 Digit NIK di KK">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">No. Kartu Keluarga <span class="text-red-400">*</span></label>
+                <input type="text" inputmode="numeric" pattern="[0-9]{16}" minlength="16" maxlength="16" id="nokk" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700" placeholder="16 Digit No. KK">
+              </div>
+              <div class="flex gap-3">
+                <div class="w-[55%]">
+                  <label class="block text-xs font-semibold text-slate-300 mb-1.5">Tempat Lahir <span class="text-red-400">*</span></label>
+                  <input type="text" id="tempatLahir" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700">
+                </div>
+                <div class="w-[45%]">
+                  <label class="block text-xs font-semibold text-slate-300 mb-1.5">Tgl Lahir <span class="text-red-400">*</span></label>
+                  <input type="date" id="tglLahir" required class="w-full px-3 py-3 text-xs rounded-xl border border-slate-700 text-white" style="color-scheme: dark;">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Nomor Akta Kelahiran <span class="text-red-400">*</span></label>
+                <input type="text" id="noAkta" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700" placeholder="Nomor Akta Kelahiran">
+              </div>
+              <div class="flex gap-3">
+                <div class="w-1/2">
+                  <label class="block text-xs font-semibold text-slate-300 mb-1.5">Jml Saudara <span class="text-red-400">*</span></label>
+                  <input type="number" id="jmlSaudara" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700" placeholder="Jumlah">
+                </div>
+                <div class="w-1/2">
+                  <label class="block text-xs font-semibold text-slate-300 mb-1.5">Anak Ke <span class="text-red-400">*</span></label>
+                  <input type="number" id="anakKe" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700" placeholder="Urutan Anak">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- B. Alamat & Kontak -->
+          <div class="glass-panel rounded-2xl overflow-hidden shadow-xl border border-slate-700/50">
+            <div class="bg-slate-800/80 px-5 py-3 border-b border-slate-700 flex items-center">
+              <span class="bg-green-500/20 text-green-400 w-7 h-7 flex items-center justify-center rounded-lg mr-3 border border-green-500/30 text-sm font-bold">2</span>
+              <h3 class="text-sm font-bold text-green-200 uppercase tracking-wider">Alamat & Kontak</h3>
+            </div>
+            <div class="p-5 flex flex-col gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Alamat (Jalan/Gang) <span class="text-red-400">*</span></label>
+                <input type="text" id="alamat" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700" placeholder="Nama Jalan / Gang">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Dusun <span class="text-red-400">*</span></label>
+                <input type="text" id="dusun" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700">
+              </div>
+              <div class="flex gap-3">
+                <div class="w-1/2">
+                  <label class="block text-xs font-semibold text-slate-300 mb-1.5">RT <span class="text-red-400">*</span></label>
+                  <input type="number" id="rt" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700">
+                </div>
+                <div class="w-1/2">
+                  <label class="block text-xs font-semibold text-slate-300 mb-1.5">RW <span class="text-red-400">*</span></label>
+                  <input type="number" id="rw" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Desa / Kelurahan <span class="text-red-400">*</span></label>
+                <input type="text" id="desa" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Kecamatan <span class="text-red-400">*</span></label>
+                <input type="text" id="kecamatan" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Kabupaten / Kota <span class="text-red-400">*</span></label>
+                <input type="text" id="kabupaten" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Provinsi <span class="text-red-400">*</span></label>
+                <input type="text" id="propinsi" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Kode Pos <span class="text-red-400">*</span></label>
+                <input type="text" inputmode="numeric" pattern="[0-9]{5}" minlength="5" maxlength="5" id="kodePos" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">No. WhatsApp Aktif <span class="text-red-400">*</span></label>
+                <input type="text" inputmode="numeric" pattern="[0-9]{10,14}" minlength="10" maxlength="14" id="noWa" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-700" placeholder="08xxxxxxxx">
+              </div>
+            </div>
+          </div>
+
+          <!-- C. Identitas Orang Tua -->
+          <div class="glass-panel rounded-2xl overflow-hidden shadow-xl border border-slate-700/50">
+            <div class="bg-slate-800/80 px-5 py-3 border-b border-slate-700 flex items-center">
+              <span class="bg-purple-500/20 text-purple-400 w-7 h-7 flex items-center justify-center rounded-lg mr-3 border border-purple-500/30 text-sm font-bold">3</span>
+              <h3 class="text-sm font-bold text-purple-200 uppercase tracking-wider">Identitas Orang Tua</h3>
+            </div>
+            <div class="p-5 flex flex-col gap-6">
+              <div class="bg-blue-900/10 p-4 rounded-xl border border-blue-800/30">
+                <h4 class="font-bold text-sm text-blue-300 mb-3">Data Ayah Kandung</h4>
+                <div class="space-y-3">
+                  <div><label class="block text-[11px] font-semibold text-slate-400 mb-1">Nama Ayah <span class="text-red-400">*</span></label><input type="text" id="ayahNama" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-700"></div>
+                  <div><label class="block text-[11px] font-semibold text-slate-400 mb-1">NIK Ayah <span class="text-red-400">*</span></label><input type="text" inputmode="numeric" pattern="[0-9]{16}" minlength="16" maxlength="16" id="ayahNik" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-700"></div>
+                  <div><label class="block text-[11px] font-semibold text-slate-400 mb-1">Tanggal Lahir <span class="text-red-400">*</span></label><input type="date" id="ayahTglLahir" required class="w-full px-3 py-2.5 text-xs rounded-xl border border-slate-700 text-white" style="color-scheme: dark;"></div>
+                  <div><label class="block text-[11px] font-semibold text-slate-400 mb-1">Pekerjaan <span class="text-red-400">*</span></label><input type="text" id="ayahKerja" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-700"></div>
+                </div>
+              </div>
+              
+              <div class="bg-pink-900/10 p-4 rounded-xl border border-pink-800/30">
+                <h4 class="font-bold text-sm text-pink-300 mb-3">Data Ibu Kandung</h4>
+                <div class="space-y-3">
+                  <div><label class="block text-[11px] font-semibold text-slate-400 mb-1">Nama Ibu <span class="text-red-400">*</span></label><input type="text" id="ibuNama" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-700"></div>
+                  <div><label class="block text-[11px] font-semibold text-slate-400 mb-1">NIK Ibu <span class="text-red-400">*</span></label><input type="text" inputmode="numeric" pattern="[0-9]{16}" minlength="16" maxlength="16" id="ibuNik" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-700"></div>
+                  <div><label class="block text-[11px] font-semibold text-slate-400 mb-1">Tanggal Lahir <span class="text-red-400">*</span></label><input type="date" id="ibuTglLahir" required class="w-full px-3 py-2.5 text-xs rounded-xl border border-slate-700 text-white" style="color-scheme: dark;"></div>
+                  <div><label class="block text-[11px] font-semibold text-slate-400 mb-1">Pekerjaan <span class="text-red-400">*</span></label><input type="text" id="ibuKerja" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-700"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- D. Upload Lampiran Dokumen (Desain Terpadu Modern) -->
+          <div class="glass-panel rounded-2xl overflow-hidden shadow-xl border border-slate-700/50">
+            <div class="bg-slate-800/80 px-5 py-3 border-b border-slate-700 flex items-center">
+              <span class="bg-yellow-500/20 text-yellow-400 w-7 h-7 flex items-center justify-center rounded-lg mr-3 border border-yellow-500/30 text-sm font-bold">4</span>
+              <h3 class="text-sm font-bold text-yellow-200 uppercase tracking-wider">Lampiran Dokumen</h3>
+            </div>
+            <div class="p-5 flex flex-col gap-5">
+              <!-- 1. KARTU: KARTU KELUARGA -->
+              <div class="relative rounded-2xl border border-slate-700/70 bg-slate-900/50 p-4 transition-all duration-200 hover:border-slate-600 shadow-lg">
+                <input type="file" id="fileKk" accept="image/*" class="hidden">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></span>
+                    <span class="text-xs font-bold text-slate-200 tracking-wide uppercase">Foto Kartu Keluarga</span>
+                    <span id="req-kk" class="text-red-400 font-bold">*</span>
+                  </div>
+                  <!-- Ikon ganti berkas tanpa teks (hanya aktif di mode edit) -->
+                  <button type="button" id="btn-ganti-kk" onclick="document.getElementById('fileKk').click()" class="hidden p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-blue-400 border border-slate-700/80 transition-all cursor-pointer" title="Ganti Berkas">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  </button>
+                </div>
+
+                <div id="dropzone-kk" onclick="ketukKartuDokumen('kk')" class="relative group cursor-pointer overflow-hidden rounded-xl border border-dashed border-slate-700 bg-slate-950/60 transition-all min-h-[140px] flex flex-col items-center justify-center p-2 text-center">
+                  <!-- Tampilan Kosong -->
+                  <div id="empty-kk" class="flex flex-col items-center justify-center space-y-2 py-4">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-400">Ketuk untuk Memilih Berkas</p>
+                  </div>
+
+                  <!-- Tampilan Preview Bersih: Klik Langsung Buka Foto Penuh -->
+                  <div id="preview-box-kk" class="hidden w-full">
+                    <img id="img-preview-kk" src="" alt="KK" onclick="bukaDokumenPenuh('kk')" class="w-full h-44 object-contain rounded-lg bg-slate-950/90 border border-slate-800/80 cursor-pointer hover:opacity-95 transition-opacity" title="Ketuk untuk melihat foto">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. KARTU: AKTA KELAHIRAN -->
+              <div class="relative rounded-2xl border border-slate-700/70 bg-slate-900/50 p-4 transition-all duration-200 hover:border-slate-600 shadow-lg">
+                <input type="file" id="fileAkta" accept="image/*" class="hidden">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]"></span>
+                    <span class="text-xs font-bold text-slate-200 tracking-wide uppercase">Foto Akta Kelahiran</span>
+                    <span id="req-akta" class="text-red-400 font-bold">*</span>
+                  </div>
+                  <!-- Ikon ganti berkas tanpa teks (hanya aktif di mode edit) -->
+                  <button type="button" id="btn-ganti-akta" onclick="document.getElementById('fileAkta').click()" class="hidden p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-green-400 border border-slate-700/80 transition-all cursor-pointer" title="Ganti Berkas">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  </button>
+                </div>
+
+                <div id="dropzone-akta" onclick="ketukKartuDokumen('akta')" class="relative group cursor-pointer overflow-hidden rounded-xl border border-dashed border-slate-700 bg-slate-950/60 transition-all min-h-[140px] flex flex-col items-center justify-center p-2 text-center">
+                  <!-- Tampilan Kosong -->
+                  <div id="empty-akta" class="flex flex-col items-center justify-center space-y-2 py-4">
+                    <div class="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-400">Ketuk untuk Memilih Berkas</p>
+                  </div>
+
+                  <!-- Tampilan Preview Bersih: Klik Langsung Buka Foto Penuh -->
+                  <div id="preview-box-akta" class="hidden w-full">
+                    <img id="img-preview-akta" src="" alt="Akta" onclick="bukaDokumenPenuh('akta')" class="w-full h-44 object-contain rounded-lg bg-slate-950/90 border border-slate-800/80 cursor-pointer hover:opacity-95 transition-opacity" title="Ketuk untuk melihat foto">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. KARTU: PAS FOTO SISWA -->
+              <div class="relative rounded-2xl border border-slate-700/70 bg-slate-900/50 p-4 transition-all duration-200 hover:border-slate-600 shadow-lg">
+                <input type="file" id="fileFoto" accept="image/*" class="hidden">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]"></span>
+                    <span class="text-xs font-bold text-slate-200 tracking-wide uppercase">Pas Foto Siswa</span>
+                    <span id="req-foto" class="text-red-400 font-bold">*</span>
+                  </div>
+                  <!-- Ikon ganti berkas tanpa teks (hanya aktif di mode edit) -->
+                  <button type="button" id="btn-ganti-foto" onclick="document.getElementById('fileFoto').click()" class="hidden p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-purple-400 border border-slate-700/80 transition-all cursor-pointer" title="Ganti Berkas">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  </button>
+                </div>
+
+                <div id="dropzone-foto" onclick="ketukKartuDokumen('foto')" class="relative group cursor-pointer overflow-hidden rounded-xl border border-dashed border-slate-700 bg-slate-950/60 transition-all min-h-[140px] flex flex-col items-center justify-center p-2 text-center">
+                  <!-- Tampilan Kosong -->
+                  <div id="empty-foto" class="flex flex-col items-center justify-center space-y-2 py-4">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-400">Ketuk untuk Memilih Berkas</p>
+                  </div>
+
+                  <!-- Tampilan Preview Bersih: Klik Langsung Buka Foto Penuh -->
+                  <div id="preview-box-foto" class="hidden w-full">
+                    <img id="img-preview-foto" src="" alt="Foto Siswa" onclick="bukaDokumenPenuh('foto')" class="w-full h-44 object-contain rounded-lg bg-slate-950/90 border border-slate-800/80 cursor-pointer hover:opacity-95 transition-opacity" title="Ketuk untuk melihat foto">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TOMBOL SUBMIT -->
+          <div class="mt-8 pb-4">
+            <button id="btn-submit" type="submit" class="btn-3d w-full bg-blue-600 shadow-[0_4px_0_rgb(30,58,138)] hover:bg-blue-500 text-white py-4 rounded-xl font-extrabold tracking-wider text-sm border border-blue-400 transition-all duration-300 cursor-pointer">
+              KIRIM FORMULIR PENDAFTARAN
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- TOAST NOTIFIKASI -->
+    <div id="toast" class="mobile-toast absolute bottom-4 z-50 transition-all duration-300 flex justify-center opacity-0 pointer-events-none">
+      <div id="toast-content" class="rounded-xl shadow-2xl px-5 py-3 flex items-center space-x-3 text-white font-bold border border-white/10 backdrop-blur-md bg-slate-800 w-full">
+        <span id="toast-icon"></span>
+        <span id="toast-msg" class="text-sm">Memproses...</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      const content = document.getElementById('toast-content');
+      document.getElementById('toast-msg').innerText = msg;
+      
+      if (type === 'success') {
+        content.className = 'rounded-xl shadow-2xl px-5 py-3 flex items-center space-x-3 text-white font-bold border border-green-400/30 bg-green-600/95 w-full';
+      } else if (type === 'error') {
+        content.className = 'rounded-xl shadow-2xl px-5 py-3 flex items-center space-x-3 text-white font-bold border border-red-400/30 bg-red-600/95 w-full';
+      } else {
+        content.className = 'rounded-xl shadow-2xl px-5 py-3 flex items-center space-x-3 text-white font-bold border border-blue-400/30 bg-blue-600/95 w-full';
+      }
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('show');
+      if (type !== 'loading') {
+        setTimeout(() => {
+          toast.classList.remove('show');
+          toast.classList.add('opacity-0', 'pointer-events-none');
+        }, 4000);
+      }
+    }
+
+    function compressImage(file) {
+      return new Promise((resolve) => {
+        if (!file) { resolve(null); return; }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 800;
+            let width = img.width, height = img.height;
+            if (width > MAX_WIDTH) { height = Math.round((height * MAX_WIDTH) / width); width = MAX_WIDTH; }
+            canvas.width = width; canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', 0.65));
+          };
+        };
+      });
+    }
+
+    // Helper mengekstrak URL pratinjau Google Drive ke CDN langsung
+    function dapatkanUrlThumbnailDrive(url) {
+      if (!url) return { thumbUrl: "", fileId: "" };
+      const str = String(url).trim();
+      let fileId = "";
+      
+      const matchD = str.match(/\/d\/([-\w]{25,})/);
+      const matchId = str.match(/[?&]id=([-\w]{25,})/);
+      const matchGeneric = str.match(/([-\w]{25,})/);
+
+      if (matchD && matchD[1]) {
+        fileId = matchD[1];
+      } else if (matchId && matchId[1]) {
+        fileId = matchId[1];
+      } else if (matchGeneric && matchGeneric[1]) {
+        fileId = matchGeneric[1];
+      }
+
+      if (fileId) {
+        // CDN Google User Content langsung (andal untuk embed img tanpa redirect)
+        return {
+          thumbUrl: 'https://lh3.googleusercontent.com/d/' + fileId + '=s800',
+          fileId: fileId
+        };
+      }
+      return { thumbUrl: str, fileId: "" };
+    }
+
+    // Membuka berkas tampilan penuh di jendela baru
+    function bukaDokumenPenuh(tipe) {
+      if (document.getElementById('nama').readOnly) return;
+      const elInput = document.getElementById('file' + tipe.charAt(0).toUpperCase() + tipe.slice(1));
+      const oldUrl = document.getElementById('old-link-' + tipe).value;
+
+      if (elInput.files && elInput.files[0]) {
+        const fileObj = elInput.files[0];
+        const blobUrl = URL.createObjectURL(fileObj);
+        window.open(blobUrl, '_blank');
+        return;
+      }
+      if (oldUrl && oldUrl.trim() !== '') {
+        window.open(oldUrl, '_blank');
+      }
+    }
+
+    // Penanganan klik pada area kartu dokumen kosong
+    function ketukKartuDokumen(tipe) {
+      if (document.getElementById('nama').readOnly) return;
+      const emptyBox = document.getElementById('empty-' + tipe);
+      if (!emptyBox.classList.contains('hidden')) {
+        const idInput = 'file' + tipe.charAt(0).toUpperCase() + tipe.slice(1);
+        const inputEl = document.getElementById(idInput);
+        if (inputEl && !inputEl.disabled) inputEl.click();
+      }
+    }
+
+    // Menampilkan berkas foto secara bersih tanpa teks penghalang
+    function perbaruiKartuDokumen(tipe, url, fileObj) {
+      const emptyBox = document.getElementById('empty-' + tipe);
+      const previewBox = document.getElementById('preview-box-' + tipe);
+      const imgPreview = document.getElementById('img-preview-' + tipe);
+      const btnGanti = document.getElementById('btn-ganti-' + tipe);
+      const isReadOnly = document.getElementById('nama').readOnly;
+
+      // Kasus 1: Pengguna memilih berkas baru
+      if (fileObj) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          imgPreview.src = e.target.result;
+          emptyBox.classList.add('hidden');
+          previewBox.classList.remove('hidden');
+          if (btnGanti) btnGanti.classList.remove('hidden');
+        };
+        reader.readAsDataURL(fileObj);
+        return;
+      }
+
+      // Kasus 2: Berkas dari database
+      if (url && String(url).trim() !== '') {
+        const cleanUrl = String(url).trim();
+        const driveInfo = dapatkanUrlThumbnailDrive(cleanUrl);
+
+        imgPreview.src = driveInfo.thumbUrl;
+        imgPreview.dataset.triedFallback = "false";
+
+        imgPreview.onerror = function() {
+          if (driveInfo.fileId && this.dataset.triedFallback !== "true") {
+            this.dataset.triedFallback = "true";
+            this.src = 'https://drive.google.com/thumbnail?id=' + driveInfo.fileId + '&sz=w800';
+            return;
+          }
+          this.onerror = null;
+          this.src = 'https://placehold.co/600x400/0f172a/38bdf8?text=Dokumen+Tersimpan';
+        };
+
+        emptyBox.classList.add('hidden');
+        previewBox.classList.remove('hidden');
+        if (btnGanti) {
+          if (!isReadOnly) btnGanti.classList.remove('hidden');
+          else btnGanti.classList.add('hidden');
+        }
+      } else {
+        // Kasus 3: Kosong
+        emptyBox.classList.remove('hidden');
+        previewBox.classList.add('hidden');
+        imgPreview.src = '';
+        if (btnGanti) btnGanti.classList.add('hidden');
+      }
+    }
+
+    // Inisialisasi event listener file input
+    ['fileKk', 'fileAkta', 'fileFoto'].forEach(id => {
+      document.getElementById(id).addEventListener('change', function(e) {
+        const tipe = id.replace('file', '').toLowerCase();
+        if (e.target.files && e.target.files[0]) {
+          perbaruiKartuDokumen(tipe, null, e.target.files[0]);
+        }
+        periksaForm();
+      });
+    });
+
+    function setTanggalInput(id, val) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!val) { el.value = ""; return; }
+      
+      const s = String(val).trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+        el.value = s;
+        return;
+      }
+      const match = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (match) {
+        el.value = match[3] + "-" + ("0" + match[2]).slice(-2) + "-" + ("0" + match[1]).slice(-2);
+        return;
+      }
+      const d = new Date(s);
+      if (!isNaN(d.getTime())) {
+        el.value = d.toISOString().split('T')[0];
+        return;
+      }
+      el.value = "";
+    }
+
+    function uraiDanIsiAlamat(alamatUtuh) {
+      alamatUtuh = (alamatUtuh || "").trim();
+      if (!alamatUtuh) return;
+
+      const parts = alamatUtuh.split(',').map(s => s.trim());
+      let jalan = "", dusun = "", rt = "", rw = "", desa = "", kec = "", kab = "", prov = "", kodepos = "";
+
+      parts.forEach(p => {
+        if (/^Dusun\s+/i.test(p)) dusun = p.replace(/^Dusun\s+/i, "");
+        else if (/RT\s*\d+/i.test(p) || /RW\s*\d+/i.test(p)) {
+          const rtMatch = p.match(/RT\s*(\d+)/i);
+          const rwMatch = p.match(/RW\s*(\d+)/i);
+          if (rtMatch) rt = rtMatch[1];
+          if (rwMatch) rw = rwMatch[1];
+        }
+        else if (/^(Desa|Kelurahan)\s+/i.test(p)) desa = p.replace(/^(Desa|Kelurahan)\s+/i, "");
+        else if (/^Kecamatan\s+/i.test(p)) kec = p.replace(/^Kecamatan\s+/i, "");
+        else if (/^(Kabupaten|Kota)\s+/i.test(p)) kab = p.replace(/^(Kabupaten|Kota)\s+/i, "");
+        else if (/^Provi?nsi\s+/i.test(p)) prov = p.replace(/^Provi?nsi\s+/i, "");
+        else if (/^Kode\s*Pos\s+/i.test(p)) kodepos = p.replace(/^Kode\s*Pos\s+/i, "");
+        else if (/^\d{5}$/.test(p)) kodepos = p;
+        else if (!jalan) jalan = p;
+      });
+
+      // Fallback urutan posisional jika format join standar
+      if (parts.length >= 7) {
+        jalan = jalan || parts[0];
+        dusun = dusun || parts[1].replace(/^Dusun\s*/i, "");
+        const rtrw = parts[2].split('/');
+        if (rtrw.length >= 2) {
+          rt = rt || rtrw[0].replace(/[^0-9]/g, '');
+          rw = rw || rtrw[1].replace(/[^0-9]/g, '');
+        }
+        desa = desa || parts[3].replace(/^Desa\s*/i, "");
+        kec = kec || parts[4].replace(/^Kecamatan\s*/i, "");
+        kab = kab || parts[5].replace(/^Kabupaten\s*/i, "");
+        prov = prov || parts[6].replace(/^Provi?nsi\s*/i, "");
+        if (parts[7]) kodepos = kodepos || parts[7].replace(/[^0-9]/g, '');
+      }
+
+      // Pastikan seluruh kolom terisi dengan data riil atau wilayah baku sekolah
+      document.getElementById('alamat').value = jalan || alamatUtuh;
+      document.getElementById('dusun').value = dusun || "PAKANDANGAN";
+      document.getElementById('rt').value = rt || "01";
+      document.getElementById('rw').value = rw || "01";
+      document.getElementById('desa').value = desa || "PAKANDANGAN SANGRA";
+      document.getElementById('kecamatan').value = kec || "BLUTO";
+      document.getElementById('kabupaten').value = kab || "SUMENEP";
+      document.getElementById('propinsi').value = prov || "JAWA TIMUR";
+      document.getElementById('kodePos').value = kodepos || "69466";
+    }
+
+    function periksaForm() {
+      const form = document.getElementById('form-pendaftaran');
+      const btn = document.getElementById('btn-submit');
+      const isEdit = document.getElementById('baris-edit').value !== "";
+
+      const hasOldKk = document.getElementById('old-link-kk').value !== "";
+      const hasOldAkta = document.getElementById('old-link-akta').value !== "";
+      const hasOldFoto = document.getElementById('old-link-foto').value !== "";
+
+      // Jika file sudah tersimpan di database, hilangkan kewajiban memilih file baru
+      document.getElementById('fileKk').required = !(isEdit || hasOldKk);
+      document.getElementById('fileAkta').required = !(isEdit || hasOldAkta);
+      document.getElementById('fileFoto').required = !(isEdit || hasOldFoto);
+
+      document.getElementById('req-kk').style.display = (isEdit || hasOldKk) ? 'none' : 'inline';
+      document.getElementById('req-akta').style.display = (isEdit || hasOldAkta) ? 'none' : 'inline';
+      document.getElementById('req-foto').style.display = (isEdit || hasOldFoto) ? 'none' : 'inline';
+
+      if (form.checkValidity()) {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'grayscale', 'cursor-not-allowed');
+        btn.innerText = isEdit ? "PERBARUI DATA PENDAFTARAN" : "KIRIM FORMULIR PENDAFTARAN";
+      } else {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'grayscale', 'cursor-not-allowed');
+        btn.innerText = "LENGKAPI SEMUA DATA DULU";
+      }
+    }
+
+    let isModeEditBtn = false;
+
+    function ubahModeTombol(mode) {
+      isModeEditBtn = (mode === 'edit');
+      const btn = document.getElementById('btn-cari');
+      const iconCari = document.getElementById('icon-kaca-pembesar');
+      const iconPensil = document.getElementById('icon-pensil');
+      const label = document.getElementById('label-btn-cari');
+
+      if (isModeEditBtn) {
+        if (iconCari) iconCari.classList.add('hidden');
+        if (iconPensil) iconPensil.classList.remove('hidden');
+        if (label) label.innerText = "Edit";
+        if (btn) {
+          btn.title = "Buka Mode Edit Data Siswa";
+          btn.className = "btn-3d px-5 py-3 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-[0_4px_0_rgb(180,83,9)] border border-amber-400/40 active:top-1 transition-all shrink-0 cursor-pointer";
+        }
+      } else {
+        if (iconCari) iconCari.classList.remove('hidden');
+        if (iconPensil) iconPensil.classList.add('hidden');
+        if (label) label.innerText = "Cari";
+        if (btn) {
+          btn.title = "Cari Data Siswa";
+          btn.className = "btn-3d px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-[0_4px_0_rgb(30,58,138)] border border-blue-400/40 active:top-1 transition-all shrink-0 cursor-pointer";
+        }
+      }
+    }
+
+    function aksiCariAtauEdit() {
+      if (isModeEditBtn) {
+        editData();
+      } else {
+        cariData();
+      }
+    }
+
+    function cariData() {
+      const inputEl = document.getElementById('cari-nik');
+      const nik = inputEl.value.trim();
+      
+      if (!nik) {
+        showToast("Masukkan 16 Digit NIK Siswa terlebih dahulu!", "error");
+        inputEl.focus();
+        return;
+      }
+
+      const btnCari = document.getElementById('btn-cari');
+      btnCari.disabled = true;
+      btnCari.classList.add('opacity-50');
+      showToast("Sedang mencari data di database...", "loading");
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(data) {
+            btnCari.disabled = false;
+            btnCari.classList.remove('opacity-50');
+            if (!data) {
+              showToast("Data dengan NIK tersebut tidak ditemukan di database!", "error");
+              return;
+            }
+            isiFormDenganData(data);
+          })
+          .withFailureHandler(function(err) {
+            btnCari.disabled = false;
+            btnCari.classList.remove('opacity-50');
+            showToast("Gagal Sistem Database: " + err.message, "error");
+          })
+          .cariDataSiswa(nik);
+      } else {
+        btnCari.disabled = false;
+        btnCari.classList.remove('opacity-50');
+        showToast("Koneksi Google Apps Script tidak aktif. Jalankan lewat Web App resmi.", "error");
+      }
+    }
+
+    function isiFormDenganData(data) {
+      document.getElementById('baris-edit').value = data.baris || "";
+      document.getElementById('status-lama').value = data.statusVerifikasi || "MENUNGGU";
+      
+      // Bagian 1 - Siswa
+      document.getElementById('nama').value = data.nama || "";
+      document.getElementById('jk').value = data.jk || "Laki-laki";
+      document.getElementById('nik').value = data.nik || "";
+      document.getElementById('nokk').value = data.nokk || "";
+      document.getElementById('tempatLahir').value = data.tempatLahir || "";
+      setTanggalInput('tglLahir', data.tglLahir);
+      document.getElementById('noAkta').value = data.noAkta || "";
+      document.getElementById('jmlSaudara').value = data.jmlSaudara || "";
+      document.getElementById('anakKe').value = data.anakKe || "";
+
+      // Bagian 2 - Alamat & Kontak
+      uraiDanIsiAlamat(data.alamatLengkap);
+      document.getElementById('noWa').value = data.noWa || "";
+
+      // Bagian 3 - Orang Tua
+      document.getElementById('ayahNama').value = data.ayahNama || "";
+      document.getElementById('ayahNik').value = data.ayahNik || "";
+      setTanggalInput('ayahTglLahir', data.ayahTglLahir);
+      document.getElementById('ayahKerja').value = data.ayahKerja || "";
+
+      document.getElementById('ibuNama').value = data.ibuNama || "";
+      document.getElementById('ibuNik').value = data.ibuNik || "";
+      setTanggalInput('ibuTglLahir', data.ibuTglLahir);
+      document.getElementById('ibuKerja').value = data.ibuKerja || "";
+
+      // Bagian 4 - Lampiran Tersimpan
+      document.getElementById('old-link-kk').value = data.linkKK || "";
+      document.getElementById('old-link-akta').value = data.linkAkta || "";
+      document.getElementById('old-link-foto').value = data.linkFoto || "";
+
+      // Render dokumen tersimpan langsung ke dalam kartu visual tunggal
+      perbaruiKartuDokumen('kk', data.linkKK, null);
+      perbaruiKartuDokumen('akta', data.linkAkta, null);
+      perbaruiKartuDokumen('foto', data.linkFoto, null);
+
+      // Status Verifikasi
+      const statusBox = document.getElementById('status-verifikasi-container');
+      const statusText = document.getElementById('status-verifikasi-text');
+      statusBox.classList.remove('hidden');
+
+      const isVerified = data.statusVerifikasi && data.statusVerifikasi.toUpperCase() !== "MENUNGGU";
+      if (isVerified) {
+        statusText.innerHTML = `<span class="text-emerald-400 font-extrabold uppercase">✓ DATA SUDAH DIVERIFIKASI ADMIN (STATUS: ${data.statusVerifikasi.toUpperCase()})</span>`;
+      } else {
+        statusText.innerHTML = `<span class="text-amber-400 font-bold uppercase">⏳ STATUS: MENUNGGU VERIFIKASI ADMIN SEKOLAH</span>`;
+      }
+
+      // Kunci awal form menjadi ReadOnly
+      toggleFormReadOnly(true);
+      ubahModeTombol('edit');
+      periksaForm();
+      showToast("Data Siswa Berhasil Ditampilkan!", "success");
+
+      statusBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function toggleFormReadOnly(isReadonly) {
+      const form = document.getElementById('form-pendaftaran');
+      const inputs = form.querySelectorAll('input, select');
+      const submitWrapper = document.getElementById('btn-submit').parentElement;
+      
+      inputs.forEach(input => {
+        if (input.type === 'hidden') return;
+        if (isReadonly) {
+          if (input.tagName === 'SELECT' || input.type === 'file') { 
+            input.disabled = true; 
+          } else { 
+            input.readOnly = true; 
+          }
+          input.classList.add('opacity-70', 'cursor-not-allowed');
+        } else {
+          if (input.tagName === 'SELECT' || input.type === 'file') { 
+            input.disabled = false; 
+          } else { 
+            input.readOnly = false; 
+          }
+          input.classList.remove('opacity-70', 'cursor-not-allowed');
+        }
+      });
+
+      // Kontrol mutlak kartu dokumen lampiran (ikut terkunci rapat saat mode baca/pencarian)
+      ['kk', 'akta', 'foto'].forEach(tipe => {
+        const dropzone = document.getElementById('dropzone-' + tipe);
+        const btnGanti = document.getElementById('btn-ganti-' + tipe);
+        const fileInput = document.getElementById('file' + tipe.charAt(0).toUpperCase() + tipe.slice(1));
+        const hasPreview = !document.getElementById('preview-box-' + tipe).classList.contains('hidden');
+
+        if (fileInput) fileInput.disabled = isReadonly;
+
+        if (dropzone) {
+          if (isReadonly) {
+            dropzone.classList.add('opacity-60', 'cursor-not-allowed', 'pointer-events-none');
+            dropzone.classList.remove('cursor-pointer');
+          } else {
+            dropzone.classList.remove('opacity-60', 'cursor-not-allowed', 'pointer-events-none');
+            dropzone.classList.add('cursor-pointer');
+          }
+        }
+
+        if (btnGanti) {
+          if (!isReadonly && hasPreview) {
+            btnGanti.classList.remove('hidden');
+          } else {
+            btnGanti.classList.add('hidden');
+          }
+        }
+      });
+
+      if (isReadonly) { 
+        submitWrapper.classList.add('hidden');
+      } else { 
+        submitWrapper.classList.remove('hidden');
+      }
+    }
+
+    function editData() {
+      const baris = document.getElementById('baris-edit').value;
+      if (!baris) {
+        showToast("Cari data terlebih dahulu sebelum melakukan edit!", "error");
+        return;
+      }
+      toggleFormReadOnly(false);
+      periksaForm();
+      showToast("Mode Edit Aktif. Berkas lama tetap tersimpan, silakan perbarui data yang diinginkan.", "success");
+      document.getElementById('nama').focus();
+    }
+
+    function resetHalamanPenuh() {
+      document.getElementById('form-pendaftaran').reset();
+      document.getElementById('baris-edit').value = "";
+      document.getElementById('status-lama').value = "";
+      document.getElementById('old-link-kk').value = "";
+      document.getElementById('old-link-akta').value = "";
+      document.getElementById('old-link-foto').value = "";
+      document.getElementById('cari-nik').value = "";
+      ubahModeTombol('cari');
+      
+      ['kk', 'akta', 'foto'].forEach(tipe => {
+        const btnGanti = document.getElementById('btn-ganti-' + tipe);
+        if (btnGanti) btnGanti.classList.add('hidden');
+        perbaruiKartuDokumen(tipe, null, null);
+      });
+      document.getElementById('status-verifikasi-container').classList.add('hidden');
+      
+      toggleFormReadOnly(false);
+      document.getElementById('form-pendaftaran').classList.remove('hidden');
+      document.getElementById('kotak-sukses').classList.add('hidden');
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      periksaForm();
+    }
+
+    async function kirimPendaftaran(e) {
+      e.preventDefault();
+      const form = document.getElementById('form-pendaftaran');
+      if (!form.checkValidity()) return; 
+
+      const btn = document.getElementById('btn-submit');
+      const isEdit = document.getElementById('baris-edit').value !== "";
+      const fileKk = document.getElementById('fileKk').files[0];
+      const fileAkta = document.getElementById('fileAkta').files[0];
+      const fileFoto = document.getElementById('fileFoto').files[0];
+
+      btn.disabled = true;
+      btn.innerText = "MENYIMPAN DATA KE SERVER...";
+      showToast("Sedang memproses penyimpanan berkas...", "loading");
+
+      const kkBase64 = fileKk ? await compressImage(fileKk) : null;
+      const aktaBase64 = fileAkta ? await compressImage(fileAkta) : null;
+      const fotoBase64 = fileFoto ? await compressImage(fileFoto) : null;
+
+      const gabungAlamat = [
+        document.getElementById('alamat').value.trim(),
+        "Dusun " + document.getElementById('dusun').value.trim(),
+        "RT " + document.getElementById('rt').value.trim() + " / RW " + document.getElementById('rw').value.trim(),
+        "Desa " + document.getElementById('desa').value.trim(),
+        "Kecamatan " + document.getElementById('kecamatan').value.trim(),
+        "Kabupaten " + document.getElementById('kabupaten').value.trim(),
+        "Provinsi " + document.getElementById('propinsi').value.trim(),
+        "Kode Pos " + document.getElementById('kodePos').value.trim()
+      ].join(', ');
+
+      const dataForm = {
+        barisEdit: document.getElementById('baris-edit').value,
+        statusLama: document.getElementById('status-lama').value,
+        nis: "", 
+        nama: document.getElementById('nama').value, 
+        jk: document.getElementById('jk').value,
+        nik: document.getElementById('nik').value, 
+        nokk: document.getElementById('nokk').value,
+        noAkta: document.getElementById('noAkta').value, 
+        tempatLahir: document.getElementById('tempatLahir').value, 
+        tglLahir: document.getElementById('tglLahir').value, 
+        jmlSaudara: document.getElementById('jmlSaudara').value,
+        anakKe: document.getElementById('anakKe').value,
+        alamatLengkap: gabungAlamat,
+        noWa: document.getElementById('noWa').value,
+        ayahNama: document.getElementById('ayahNama').value, 
+        ayahNik: document.getElementById('ayahNik').value,
+        ayahTglLahir: document.getElementById('ayahTglLahir').value, 
+        ayahKerja: document.getElementById('ayahKerja').value,
+        ibuNama: document.getElementById('ibuNama').value, 
+        ibuNik: document.getElementById('ibuNik').value,
+        ibuTglLahir: document.getElementById('ibuTglLahir').value, 
+        ibuKerja: document.getElementById('ibuKerja').value,
+        fileKkBase64: kkBase64, fileKkMime: fileKk ? fileKk.type : '',
+        fileAktaBase64: aktaBase64, fileAktaMime: fileAkta ? fileAkta.type : '',
+        fileFotoBase64: fotoBase64, fileFotoMime: fileFoto ? fileFoto.type : '',
+        oldLinkKK: document.getElementById('old-link-kk').value,
+        oldLinkAkta: document.getElementById('old-link-akta').value,
+        oldLinkFoto: document.getElementById('old-link-foto').value
+      };
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (res.status === 'sukses') {
+              showToast(res.pesan, "success");
+              document.getElementById('form-pendaftaran').classList.add('hidden');
+              document.getElementById('status-verifikasi-container').classList.add('hidden');
+              document.getElementById('pesan-sukses-detail').innerText = res.pesan;
+              document.getElementById('kotak-sukses').classList.remove('hidden');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              showToast(res.pesan, "error");
+              btn.disabled = false;
+              btn.innerText = isEdit ? "PERBARUI DATA PENDAFTARAN" : "KIRIM FORMULIR PENDAFTARAN";
+            }
+          })
+          .withFailureHandler(function(err) {
+            showToast("Gagal Menyimpan ke Database: " + err.message, "error");
+            btn.disabled = false;
+            btn.innerText = isEdit ? "PERBARUI DATA PENDAFTARAN" : "KIRIM FORMULIR PENDAFTARAN";
+          })
+          .prosesPendaftaran(dataForm);
+      } else {
+        showToast("Koneksi Google Apps Script tidak aktif. Form tidak dapat disimpan secara lokal.", "error");
+        btn.disabled = false;
+        btn.innerText = isEdit ? "PERBARUI DATA PENDAFTARAN" : "KIRIM FORMULIR PENDAFTARAN";
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      periksaForm();
+
+      const inputCari = document.getElementById('cari-nik');
+      if (inputCari) {
+        inputCari.addEventListener('input', function() {
+          if (isModeEditBtn) {
+            ubahModeTombol('cari');
+          }
+        });
+      }
+
+      const inputsAngka = ['cari-nik', 'nik', 'nokk', 'kodePos', 'noWa', 'ayahNik', 'ibuNik'];
+      inputsAngka.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
